@@ -63,7 +63,7 @@ namespace BlueSMS
             Console.WriteLine("Processing Payment Reminders");
             Db.DbConnectionString = Config.DatabaseConnString;
             string reminderListHtml = "<p>SMS Payment Reminders will be sent to the following customers at 1pm</p><ul>";
-            var reminders = Db.GetPaymentReminders();
+            var reminders = Db.GetPaymentRemindersReport();
                 foreach (var item in reminders)
                 {
                     reminderListHtml = reminderListHtml + "<li>" + item.AgreementReference + " - " + item.Forename + " " + item.Surname + " - BespokeArrears: " + item.BespokeArrearsState + " - " + SmsMessagePt1 + item.NextDueDate.AddDays(3).ToShortDateString() + SmsMessagePt2 + "</li>";
@@ -71,9 +71,26 @@ namespace BlueSMS
                 reminderListHtml = reminderListHtml + "</ul><ul>";
 
             Smtp.SendHtmlEmail("SMS Payment Reminders Report", reminderListHtml);
-	{
-		 
-	}
+	    }
+
+        [Verb(IsDefault = true, Aliases = "-sendMessages")]
+        public static void SendPaymentReminders()
+        {
+            const string SmsMessagePt1 = "Your next Blue Motor Finance loan repayment is due in 3 days on ";
+            const string SmsMessagePt2 = ". Please ensure funds are available. If you have any issues please call 020 3005 9332";
+            Console.WriteLine("Sending Payment Reminders");
+            Db.DbConnectionString = Config.DatabaseConnString;
+
+            string smsMessage = "";
+            string smsNumber = "";
+            var reminders = Db.GetPaymentReminders();
+            foreach (var item in reminders)
+            {
+                smsMessage = SmsMessagePt1 + item.NextDueDate.AddDays(3).ToShortDateString() + SmsMessagePt2;
+                smsNumber = item.MobilePhoneStdCode = item.MobilePhoneNumber.Trim();
+                TwilioLib.SendSms(smsMessage, smsNumber);
+                Console.WriteLine("Message Sent to: " + smsNumber + ", Message: " + smsMessage);
+            }
         }
 
         [Verb(Aliases = "-s")]

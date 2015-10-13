@@ -45,6 +45,12 @@ namespace BlueSMS
             return _db.PaymentReminders.All();
         }
 
+        public static List<Reminder> GetPaymentRemindersReport()
+        {
+            var _db = Database.OpenConnection(DbConnectionString);
+            return _db.PaymentRemindersReport.All();
+        }
+
 
     }
 }
