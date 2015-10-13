@@ -73,7 +73,7 @@ namespace BlueSMS
             Smtp.SendHtmlEmail("SMS Payment Reminders Report", reminderListHtml);
 	    }
 
-        [Verb(IsDefault = true, Aliases = "-sendMessages")]
+        [Verb(Aliases = "-sendMessages")]
         public static void SendPaymentReminders()
         {
             const string SmsMessagePt1 = "Your next Blue Motor Finance loan repayment is due in 3 days on ";
