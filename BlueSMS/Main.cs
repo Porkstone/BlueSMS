@@ -50,6 +50,8 @@ namespace BlueSMS
             
             Clipboard.SetText(ConfigProtect.Encrypt(text));
             Console.WriteLine("Encrytped Value has been copied to the clipboard");
+            Console.WriteLine("Decrypting to test");
+            Console.WriteLine(ConfigProtect.Decrypt(ConfigProtect.Encrypt(text)));
         }
 
 

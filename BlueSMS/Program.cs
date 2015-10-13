@@ -15,16 +15,9 @@ namespace BlueSMS
         [STAThread]
         static void Main(string[] args)
         {
-            const string SendToNumber = "+447770928922";
-            const string Message = "Hello, This is your friendly neighbourhood finance company.";
-
-            ParseCmdLineArgs(args);
-
+             ParseCmdLineArgs(args);
             System.Threading.Thread.Sleep(5000);
-            
-            Console.WriteLine("Sending message: '" + Message + "'  to number: " + SendToNumber);
-            //TwilioLib.SendSms(Message, SendToNumber);
-        }
+         }
 
         private static void ParseCmdLineArgs(string[] args)
         {
