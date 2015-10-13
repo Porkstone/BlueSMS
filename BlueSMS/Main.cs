@@ -62,7 +62,7 @@ namespace BlueSMS
             const string SmsMessagePt2 = ". Please ensure funds are available. If you have any issues please call 020 3005 9332";
             Console.WriteLine("Processing Payment Reminders");
             Db.DbConnectionString = Config.DatabaseConnString;
-            string reminderListHtml = "<p>SMS Payment Reminders will be sent to the following customers at 1pm</p><ul>";
+            string reminderListHtml = "<p>SMS Payment Reminders will be sent to the following customers at 3pm tomorrow</p><ul>";
             var reminders = Db.GetPaymentRemindersReport();
                 foreach (var item in reminders)
                 {
