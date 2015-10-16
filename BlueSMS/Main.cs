@@ -87,7 +87,7 @@ namespace BlueSMS
             foreach (var item in reminders)
             {
                 smsMessage = SmsMessagePt1 + item.NextDueDate.AddDays(3).ToShortDateString() + SmsMessagePt2;
-                smsNumber = item.MobilePhoneStdCode = item.MobilePhoneNumber.Trim();
+                smsNumber = item.MobilePhoneStdCode.Trim() + item.MobilePhoneNumber.Trim();
                 TwilioLib.SendSms(smsMessage, smsNumber);
                 Console.WriteLine("Message Sent to: " + smsNumber + ", Message: " + smsMessage);
             }
