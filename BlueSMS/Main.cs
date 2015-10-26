@@ -66,7 +66,7 @@ namespace BlueSMS
             var reminders = Db.GetPaymentRemindersReport();
                 foreach (var item in reminders)
                 {
-                    reminderListHtml = reminderListHtml + "<li>" + item.AgreementReference + " - " + item.Forename + " " + item.Surname + " - BespokeArrears: " + item.BespokeArrearsState + " - " + SmsMessagePt1 + item.NextDueDate.AddDays(3).ToShortDateString() + SmsMessagePt2 + "</li>";
+                    reminderListHtml = reminderListHtml + "<li>" + item.AgreementReference + " - " + item.Forename + " " + item.Surname + " - BespokeArrears: " + item.BespokeArrearsState + " - " + SmsMessagePt1 + item.NextDueDate.ToShortDateString() + SmsMessagePt2 + "</li>";
                 }
                 reminderListHtml = reminderListHtml + "</ul><ul>";
 
@@ -86,7 +86,7 @@ namespace BlueSMS
             var reminders = Db.GetPaymentReminders();
             foreach (var item in reminders)
             {
-                smsMessage = SmsMessagePt1 + item.NextDueDate.AddDays(3).ToShortDateString() + SmsMessagePt2;
+                smsMessage = SmsMessagePt1 + item.NextDueDate.ToShortDateString() + SmsMessagePt2;
                 smsNumber = item.MobilePhoneStdCode.Trim() + item.MobilePhoneNumber.Trim();
                 TwilioLib.SendSms(smsMessage, smsNumber);
                 Console.WriteLine("Message Sent to: " + smsNumber + ", Message: " + smsMessage);
