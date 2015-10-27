@@ -80,6 +80,9 @@ namespace BlueSMS
             const string SmsMessagePt2 = ". Please ensure funds are available. If you have any issues please call 020 3005 9332";
             Console.WriteLine("Sending Payment Reminders");
             Db.DbConnectionString = Config.DatabaseConnString;
+            TwilioLib.AccountSid = Config.TwilioAccountSid;
+            TwilioLib.AuthToken = Config.TwilioAuthToken;
+            TwilioLib.FromNumber = Config.TwilioFromNumber;
 
             string smsMessage = "";
             string smsNumber = "";
