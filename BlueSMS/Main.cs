@@ -84,6 +84,7 @@ namespace BlueSMS
             TwilioLib.AuthToken = Config.TwilioAuthToken;
             TwilioLib.FromNumber = Config.TwilioFromNumber;
 
+            var BatchGuid = Guid.NewGuid();
             string smsMessage = "";
             string smsNumber = "";
             var reminders = Db.GetPaymentReminders();
@@ -91,8 +92,32 @@ namespace BlueSMS
             {
                 smsMessage = SmsMessagePt1 + item.NextDueDate.ToShortDateString() + SmsMessagePt2;
                 smsNumber = item.MobilePhoneStdCode.Trim() + item.MobilePhoneNumber.Trim();
-                TwilioLib.SendSms(smsMessage, smsNumber);
+
+                // Override To number if we are not in the live environment
+                if (Config.Environment != "LIVE") { smsNumber = "+44770928922"; }
+                
+                var msg = TwilioLib.SendSms(smsMessage, smsNumber);
                 Console.WriteLine("Message Sent to: " + smsNumber + ", Message: " + smsMessage);
+                Db.SaveOutboundMessage(BatchGuid, item.AgreementReference.Trim(), msg.Sid, msg.Uri.OriginalString, msg.From, msg.To, msg.Body, msg.Status);
+            }
+        }
+        [Verb(Aliases = "-checkMessageStatuses")]
+        public static void CheckMessageStatuses()
+        {
+            Db.DbConnectionString = Config.DatabaseConnString;
+
+            var activeOutboundMessages = Db.GetActiveOutboundMessages();
+
+            TwilioLib.AccountSid = Config.TwilioAccountSid;
+            TwilioLib.AuthToken = Config.TwilioAuthToken;
+            foreach (var item in activeOutboundMessages)
+            {
+                var msg = TwilioLib.RetrieveMessage(item.Sid);
+                if (item.Status != msg.Status)
+                {
+                    string error = msg.ErrorCode.ToString() ?? "" + " : " +  msg.ErrorMessage ?? "";
+                    Db.AppendToMessageLog(msg.Sid, error, msg.Status);
+                 }       
             }
         }
 

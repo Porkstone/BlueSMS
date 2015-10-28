@@ -51,6 +51,23 @@ namespace BlueSMS
             return _db.PaymentRemindersReport.All();
         }
 
+        public static void SaveOutboundMessage(Guid batchGuid, string agreementReference, string sid, string uri, string fromNumber, string toNumber, string body, string status)
+        {
+            var _db = Database.OpenConnection(DbConnectionString);
+            var message = _db.OutboundMessages.Insert(BatchGuid: batchGuid, AgreementReference: agreementReference, Sid: sid, Uri: uri, FromNumber: fromNumber, ToNumber: toNumber, Body: body, Status: status, CreatedOn: DateTime.Now);
+        }
+
+        public static void AppendToMessageLog(string sid, string error, string status)
+        {
+            var _db = Database.OpenConnection(DbConnectionString);
+            var message = _db.OutboundMessageLog.Insert(Sid: sid, Status: status, Error: error, CreatedOn: DateTime.Now);
+        }
+
+        public static List<SmsMessageStatus> GetActiveOutboundMessages()
+        {
+            var _db = Database.OpenConnection(DbConnectionString);
+            return _db.ActiveOutboundMessages.All();
+        }
 
     }
 }

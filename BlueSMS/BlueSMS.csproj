@@ -63,6 +63,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\Reminder.cs" />
+    <Compile Include="Data\SmsMessage.cs" />
+    <Compile Include="Data\SmsMessageStatus.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="CommonConfig.cs" />
     <Compile Include="Config.cs" />

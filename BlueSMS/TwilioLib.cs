@@ -12,11 +12,17 @@ namespace BlueSMS
         public static string AccountSid { get; set; }
         public static string AuthToken { get; set; }
         public static string FromNumber { get; set; }
-        
-        public static void SendSms(string message, string destinationNumber)
+
+        public static Twilio.Message SendSms(string message, string destinationNumber)
         {
             var client = new TwilioRestClient(AccountSid, AuthToken);
-            client.SendMessage(FromNumber, destinationNumber, message);
+            return client.SendMessage(FromNumber, destinationNumber, message);
         }
-    }
+
+        public static Twilio.Message RetrieveMessage(string sid)
+        {
+            var client = new TwilioRestClient(AccountSid, AuthToken);
+            return client.GetMessage(sid);
+        }
+    }   
 }
