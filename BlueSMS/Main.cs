@@ -66,7 +66,7 @@ namespace BlueSMS
             var reminders = Db.GetPaymentRemindersReport();
                 foreach (var item in reminders)
                 {
-                    reminderListHtml = reminderListHtml + "<li>" + item.AgreementReference + " - " + item.Forename + " " + item.Surname + " - BespokeArrears: " + item.BespokeArrearsState + " - " + SmsMessagePt1 + item.NextDueDate.ToString("dd-MMM-yyyy") + SmsMessagePt2 + "</li>";
+                    reminderListHtml = reminderListHtml + "<li>" + item.AgreementReference + " - " + item.Forename + " " + item.Surname + " - BespokeArrears: " + item.BespokeArrearsState + " - " + SmsMessagePt1 + item.NextDueDate.ToString("d MMM yyyy") + SmsMessagePt2 + "</li>";
                 }
                 reminderListHtml = reminderListHtml + "</ul><ul>";
 
@@ -78,7 +78,7 @@ namespace BlueSMS
         {
             const string SmsMessagePt1 = "Your next Blue Motor Finance loan repayment is due in 3 days on ";
             const string SmsMessagePt2 = ". Please ensure funds are available. If you have any issues please call 020 3005 9332";
-            Console.WriteLine("Sending Payment Reminders. System Time: " + DateTime.Now.ToString("dd-MMM-yyyy"));
+            Console.WriteLine("Sending Payment Reminders. System Time: " + DateTime.Now.ToString("d MMM yyyy"));
             Db.DbConnectionString = Config.DatabaseConnString;
             TwilioLib.AccountSid = Config.TwilioAccountSid;
             TwilioLib.AuthToken = Config.TwilioAuthToken;
@@ -90,7 +90,7 @@ namespace BlueSMS
             var reminders = Db.GetPaymentReminders();
             foreach (var item in reminders)
             {
-                smsMessage = SmsMessagePt1 + item.NextDueDate.ToString("dd-MMM-yyyy") + SmsMessagePt2;
+                smsMessage = SmsMessagePt1 + item.NextDueDate.ToString("d MMM yyyy") + SmsMessagePt2;
                 smsNumber = item.MobilePhoneStdCode.Trim() + item.MobilePhoneNumber.Trim();
 
                 // Override To number if we are not in the live environment
