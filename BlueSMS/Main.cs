@@ -62,13 +62,17 @@ namespace BlueSMS
             const string SmsMessagePt2 = ". Please ensure funds are available. If you have any issues please call 020 3005 9332";
             Console.WriteLine("Processing Payment Reminders");
             Db.DbConnectionString = Config.DatabaseConnString;
-            string reminderListHtml = "<p>SMS Payment Reminders will be sent to the following customers at 3pm tomorrow</p><ul>";
+            string reminderListHtml = "<img src='http://cdn.bluemotorfinance.co.uk/images/bluesms/blue-logo-mid-res-sm.jpg' /><p>SMS Payment Reminders will be sent to the following customers at 3pm tomorrow</p><table cellpadding='5px' style='width: 800px;'><thead style='background: lightgray;'><tr><th>Agreement</th><th style='width: 100px'>Customer Name</th><th>Bespoke Arrerars</th><th>Message</th></tr></thead><tbody>";
             var reminders = Db.GetPaymentRemindersReport();
+            int counter = 0;
                 foreach (var item in reminders)
                 {
-                    reminderListHtml = reminderListHtml + "<li>" + item.AgreementReference + " - " + item.Forename + " " + item.Surname + " - BespokeArrears: " + item.BespokeArrearsState + " - " + SmsMessagePt1 + item.NextDueDate.ToString("d MMM yyyy") + SmsMessagePt2 + "</li>";
+                    counter += 1;
+                    string startTag = "<tr>";
+                    if (IsEven(counter)) { startTag = "<tr style='background: #99ccff'"; }
+                    reminderListHtml = reminderListHtml + startTag + "<td>" + item.AgreementReference + "</td><td>" + item.Forename + " " + item.Surname + "</td><td>" + item.BespokeArrearsState + "</td><td>" + SmsMessagePt1 + item.NextDueDate.ToString("d MMM yyyy") + SmsMessagePt2 + "</td></tr>";
                 }
-                reminderListHtml = reminderListHtml + "</ul><ul>";
+                reminderListHtml = reminderListHtml + "</tbody></table>";
 
             Smtp.SendHtmlEmail("SMS Payment Reminders Report", reminderListHtml);
 	    }
@@ -129,6 +133,10 @@ namespace BlueSMS
             Console.WriteLine("SmtpPassword: " + Config.SmtpPassword);
         }
 
-        
+        private static bool IsEven(int number)
+        {
+            // Use modulus http://stackoverflow.com/questions/160930/how-do-i-check-if-an-integer-is-even-or-odd
+            return (number % 2 == 0);
+        }
     }
 }
